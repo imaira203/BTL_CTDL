@@ -99,7 +99,8 @@ int nhapMang() {
     }
 }
 
-int menu(int choice){
+int menu(){
+    int choice;
     printf("1. Nhap mang so nguyen\n");
     printf("2. Them 1 phan tu vao vi tri bat ki\n");
     printf("3. So luong phan tu K, kiem tra chia het cho 3\n");
@@ -110,10 +111,13 @@ int menu(int choice){
     printf("-------------------------------------------------------------------------------------------------\n");
     printf("Chon: ");
     scanf("%d", &choice);
+    return choice;
 }
 
 int main(){
-    int choice = menu(choice);
+    int choice;
+    do {
+        choice = menu();
     switch (choice)
     {
     case 0:
@@ -121,27 +125,21 @@ int main(){
         break;
     case 1:
         nhapMang();
-        menu(choice);
         break;
     case 2:
-        menu(choice);
         break;
     case 3:
-        menu(choice);
         break;
     case 4:
-        menu(choice);
         break;
     case 5:
-        menu(choice);
         break;
     case 6:
-        menu(choice);
         break;
-    
+
     default:
         printf("Vui long chon lua chon hop le\n");
-        menu(choice);
         break;
     }
+    } while (choice != 0);
 }
