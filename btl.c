@@ -29,7 +29,7 @@ void append(Node** head, int data) {
 }
 
 // sap xep tang dan
-void DESCsortList(Node* head) {
+void ASCsortList(Node* head) {
     if (head == NULL) return;
     Node* current;
     Node* index;
@@ -44,6 +44,11 @@ void DESCsortList(Node* head) {
             }
         }
     }
+}
+
+// sap xep giam dan
+void DESCsortList(Node* head){
+
 }
 
 void printList(Node* head) {
@@ -62,7 +67,7 @@ int isNumber(char* str) {
     return 1; 
 }
 
-int nhapMang() {
+int Input() {
     Node* head = NULL;  
     char input[10];     
 
@@ -124,7 +129,7 @@ int main(){
         printf("Thoat\n");
         break;
     case 1:
-        nhapMang();
+        Input();
         break;
     case 2:
         break;
