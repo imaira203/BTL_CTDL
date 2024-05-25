@@ -8,34 +8,40 @@ typedef struct Node {
     struct Node* next;
 } Node;
 
-// tao node
+// tao node moi
 Node* createNode(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
+    if (!newNode) {
+        printf("Memory allocation error\n");
+        exit(1);
+    }
     newNode->data = data;
     newNode->next = NULL;
     return newNode;
 }
 
-// them 1 node vao cuoi danh sach
-void append(Node** head, int data) {
+// tang them node
+void append(Node **head, int data) {
     Node* newNode = createNode(data);
     if (*head == NULL) {
         *head = newNode;
         return;
     }
     Node* temp = *head;
-    for (; temp->next != NULL; temp = temp->next);
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
     temp->next = newNode;
 }
 
 // sap xep tang dan
-void ASCsortList(Node* head) {
-    if (head == NULL) return;
+void ASCsortList(Node **head) {
+    if (*head == NULL) return;
     Node* current;
     Node* index;
     int temp;
 
-    for (current = head; current->next != NULL; current = current->next) {
+    for (current = *head; current->next != NULL; current = current->next) {
         for (index = current->next; index != NULL; index = index->next) {
             if (current->data > index->data) {
                 temp = current->data;
@@ -47,64 +53,104 @@ void ASCsortList(Node* head) {
 }
 
 // sap xep giam dan
-void DESCsortList(Node* head){
+void DESCsortList(Node **head) {
+    if (*head == NULL) return;
+    Node* current;
+    Node* index;
+    int temp;
 
-}
-
-void printList(Node* head) {
-    for (Node* temp = head; temp != NULL; temp = temp->next) {
-        printf("%d ", temp->data);
-    }
-    printf("\n");
-}
-
-int isNumber(char* str) {
-    for (int i = 0; i < strlen(str); i++) {
-        if (!isdigit(str[i]) && str[i] != '-' && str[i] != '+') {
-            return 0; 
+    for (current = *head; current->next != NULL; current = current->next) {
+        for (index = current->next; index != NULL; index = index->next) {
+            if (current->data < index->data) {
+                temp = current->data;
+                current->data = index->data;
+                index->data = temp;
+            }
         }
     }
-    return 1; 
 }
 
-int Input() {
-    Node* head = NULL;  
-    char input[10];     
+// in danh sach
+void printList(Node *head) {
+    Node* temp = head;
+    while (temp != NULL) {
+        printf("|%d", temp->data);
+        temp = temp->next;
+    }
+    printf("|\n");
+}
+
+// check so nguyen
+int isNumber(char* str) {
+    int i = 0;
+    if (str[0] == '-' || str[0] == '+') i = 1;
+    for (; i < strlen(str); i++) {
+        if (!isdigit(str[i])) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+// Nhap danh sach
+void Input(Node **head) {
+    char input[10];
 
     for (int i = 0 ;; i++) {
-        printf("Nhap so thu %d (nhap '#' de dung): ", i+1);
-        scanf("%s", input); 
+        printf("Nhap so thu %d (nhap '#' de dung): ", i + 1);
+        scanf("%s", input);
         if (strcmp(input, "#") == 0) {
             break;
         }
-        // kiem tra co phai so hay khong
+
         while (!isNumber(input)) {
-            printf("Nhap lai so thu %d, chi nhap so nguyen (nhap '#' de dung): ", i+1);
+            printf("Nhap lai so thu %d, chi nhap so nguyen (nhap '#' de dung): ", i + 1);
             scanf("%s", input);
             if (strcmp(input, "#") == 0) {
-                break; 
+                break;
             }
         }
         if (strcmp(input, "#") == 0) {
-            break; 
+            break;
         }
-        int number = atoi(input);  // chuyen chuoi thanh so nguyen
-        append(&head, number);     // them so nguyen vao danh sach
+        int number = atoi(input);  // chuyen doi chuoi thanh so
+        append(head, number);      // them so vao danh sach
     }
 
     printf("Danh sach da nhap:\n");
-    printList(head);
-
-    // giai phong bo nho
-    Node* temp;
-    for (; head != NULL; ) {
-        temp = head;
-        head = head->next;
-        free(temp);
-    }
+    printList(*head);
 }
 
-int menu(){
+// chen node vao vi tri dau
+void InsertFirst(Node **head, int x) {
+    Node* newNode = createNode(x);
+    newNode->next = *head;
+    *head = newNode;
+}
+
+// chen node vao vi tri K
+void Insert(Node **head, int x, int k) {
+    int n = sizeof(**head);
+    Node* newNode = createNode(x);
+    Node* temp = *head;
+    if (k < 1 || k > n + 1){
+        printf("Vi tri khong hop le\n");
+        return;
+    }
+    if (k == 1) {
+        InsertFirst(head, x);
+        return;
+    }
+
+    for (int i = 0; temp != NULL && i < k-2; i++) {
+        temp = temp->next;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+int menu() {
     int choice;
     printf("1. Nhap mang so nguyen\n");
     printf("2. Them 1 phan tu vao vi tri bat ki\n");
@@ -119,32 +165,42 @@ int menu(){
     return choice;
 }
 
-int main(){
+int main() {
+
+    Node* head = NULL;
+
     int choice;
     do {
         choice = menu();
-    switch (choice)
-    {
-    case 0:
-        printf("Thoat\n");
-        break;
-    case 1:
-        Input();
-        break;
-    case 2:
-        break;
-    case 3:
-        break;
-    case 4:
-        break;
-    case 5:
-        break;
-    case 6:
-        break;
-
-    default:
-        printf("Vui long chon lua chon hop le\n");
-        break;
-    }
+        switch (choice) {
+            case 0:
+                printf("Thoat\n");
+                break;
+            case 1:
+                Input(&head);
+                break;
+            case 2: {
+                int x, k;
+                printf("Nhap X: ");
+                scanf("%d", &x);
+                printf("Nhap vi tri k: ");
+                scanf("%d", &k);
+                Insert(&head, x, k);
+                printList(head);
+                break;
+            }
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            default:
+                printf("Vui long chon lua chon hop le\n");
+                break;
+        }
     } while (choice != 0);
+    return 0;
 }
