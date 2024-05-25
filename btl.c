@@ -165,17 +165,17 @@ int checkElement(Node **head, int k){
 
 void checkPosition(Node *head) {
     Node* temp = head;
-    int index = 1;
-    while (temp != NULL && temp->next != NULL && temp->next->next != NULL) {
+    int found = 0;
+    for (int i = 1; temp != NULL && temp->next != NULL && temp->next->next != NULL; i++) {
         if (temp->data > 0 && temp->data % 2 == 0 && 
             temp->next->data > 0 && temp->next->data % 2 == 0 &&
             temp->next->next->data > 0 && temp->next->next->data % 2 == 0) {
-            printf("Tim thay 3 so chan duong lien tiep o cac vi tri: %d, %d, %d\n", index, index+1, index+2);
-            return;
+            printf("Tim thay 3 so chan duong lien tiep o cac vi tri: %d, %d, %d\n", i, i+1, i+2);
+            found = 1;
         }
         temp = temp->next;
-        index++;
     }
+    if (found == 0)
     printf("Khong tim thay 3 so chan duong lien tiep\n");
 }
 
