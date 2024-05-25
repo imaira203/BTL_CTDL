@@ -163,8 +163,42 @@ int checkElement(Node **head, int k){
     return count;
 }
 
-int checkPosition(){
+void checkPosition(Node *head) {
+    Node* temp = head;
+    int index = 1;
+    while (temp != NULL && temp->next != NULL && temp->next->next != NULL) {
+        if (temp->data > 0 && temp->data % 2 == 0 && 
+            temp->next->data > 0 && temp->next->data % 2 == 0 &&
+            temp->next->next->data > 0 && temp->next->next->data % 2 == 0) {
+            printf("Tim thay 3 so chan duong lien tiep o cac vi tri: %d, %d, %d\n", index, index+1, index+2);
+            return;
+        }
+        temp = temp->next;
+        index++;
+    }
+    printf("Khong tim thay 3 so chan duong lien tiep\n");
+}
 
+void checkCount(Node *head){
+    Node* temp = head;
+    int count = 0;
+    int SUM = 0;
+    double AVG = 0;
+    while (temp != NULL){
+        if (temp->data%2 == 0 && temp->data > 0){
+            count++;
+            SUM += temp->data;
+        }
+        temp = temp->next;
+    }
+    if (count > 0){
+    AVG = (double)SUM/count;
+    printf("So luong so chan duong trong danh sach la: %d\n", count);
+    printf("Trung binh cong cac so chan duong trong danh sach la: %.2f\n", AVG);
+    }
+    else {
+        printf("Khong co so chan duong trong danh sach\n");
+    }
 }
 
 int menu() {
@@ -226,8 +260,10 @@ int main() {
             }
                 break;
             case 4:
+                checkPosition(head);
                 break;
             case 5:
+                checkCount(head);
                 break;
             case 6:
                 break;
