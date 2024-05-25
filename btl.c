@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
+// Khai bao cau truc cua NODE
 typedef struct Node {
     int data;
     struct Node* next;
@@ -94,26 +95,26 @@ int isNumber(char* str) {
 
 // Nhap danh sach
 void Input(Node **head) {
-    char input[10];
+    char input;
 
     for (int i = 0 ;; i++) {
         printf("Nhap so thu %d (nhap '#' de dung): ", i + 1);
-        scanf("%s", input);
-        if (strcmp(input, "#") == 0) {
+        scanf("%s", &input);
+        if (strcmp(&input, "#") == 0) {
             break;
         }
 
-        while (!isNumber(input)) {
+        while (!isNumber(&input)) {
             printf("Nhap lai so thu %d, chi nhap so nguyen (nhap '#' de dung): ", i + 1);
-            scanf("%s", input);
-            if (strcmp(input, "#") == 0) {
+            scanf("%s", &input);
+            if (strcmp(&input, "#") == 0) {
                 break;
             }
         }
-        if (strcmp(input, "#") == 0) {
+        if (strcmp(&input, "#") == 0) {
             break;
         }
-        int number = atoi(input);  // chuyen doi chuoi thanh so
+        int number = atoi(&input);  // chuyen doi chuoi thanh so
         append(head, number);      // them so vao danh sach
     }
     printf("-------------------------------------------------------------------------------------------------\n");
@@ -129,7 +130,32 @@ void InsertFirst(Node **head, int x) {
 }
 
 // chen node vao vi tri K
-void Insert(Node **head, int x, int k) {
+void Insert(Node **head) {
+    char inX, inK;
+    int x, k;
+
+    while (1) {
+        printf("Nhap so can chen: ");
+        scanf("%s", &inX);
+        if (isNumber(&inX)) {
+            x = atoi(&inX);
+            break;
+        } else {
+            printf("Vui long nhap chu so hop le.\n");
+        }
+    }
+
+    while (1) {
+        printf("Nhap vi tri: ");
+        scanf("%s", &inK);
+        if (isNumber(&inK)) {
+            k = atoi(&inK);
+            break;
+        } else {
+            printf("Vui long nhap chu so hop le.\n");
+        }
+    }
+
     Node* newNode = createNode(x);
     if (k < 1) {
         printf("-------------------------------------------------------------------------------------------------\n");
@@ -164,8 +190,21 @@ void Insert(Node **head, int x, int k) {
     printList(*head);
 }
 
+
 // Kiem tra phan tu trong danh sach
-int checkElement(Node **head, int k){
+int checkElement(Node **head){
+    char inK;
+    int k;
+    while (1) {
+        printf("Nhap so can tim: ");
+        scanf("%s", &inK);
+        if (isNumber(&inK)) {
+            k = atoi(&inK);
+            break;
+        } else {
+            printf("Vui long nhap chu so hop le.\n");
+        }
+    }
     int n = sizeof(**head);
     int count = 0;
     Node* temp = *head;
@@ -175,7 +214,20 @@ int checkElement(Node **head, int k){
         }
         temp = temp->next;
     }
-    return count;
+    if (count > 0){
+        printf("-------------------------------------------------------------------------------------------------\n");
+        printf("So luong phan tu %d la: %d\n", k, count);
+            if (count%3 == 0){
+                printf("So luong phan tu %d trong danh sach chia het cho 3\n", k);
+            }
+            else {
+                printf("So luong phan tu %d trong danh sach khong chia het cho 3\n", k);
+            }
+        }
+        else {
+            printf("-------------------------------------------------------------------------------------------------\n");
+            printf("Khong tim thay phan tu %d\n", k);
+        }
 }
 
 // Kiem tra 3 so duong canh nhau
@@ -345,34 +397,11 @@ int main() {
                 Input(&head);
                 break;
             case 2: {
-                int x, k;
-                printf("Nhap so can chen: ");
-                scanf("%d", &x);
-                printf("Nhap vi tri: ");
-                scanf("%d", &k);
-                Insert(&head, x, k);
+                Insert(&head);
                 break;
             }
-            case 3:{
-                int k;
-                printf("Nhap so can tim: ");
-                scanf("%d", &k);
-                int count = checkElement(&head, k);
-                if (count > 0){
-                printf("-------------------------------------------------------------------------------------------------\n");
-                printf("So luong phan tu %d la: %d\n", k, count);
-                    if (count%3 == 0){
-                        printf("So luong phan tu %d trong danh sach chia het cho 3\n");
-                    }
-                    else {
-                        printf("So luong phan tu %d trong danh sach khong chia het cho 3\n");
-                    }
-                }
-                else {
-                    printf("-------------------------------------------------------------------------------------------------\n");
-                    printf("Khong tim thay phan tu %d\n"), k;
-                }
-            }
+            case 3:
+                checkElement(&head);
                 break;
             case 4:
                 checkPosition(head);
