@@ -150,12 +150,29 @@ void Insert(Node **head, int x, int k) {
     temp->next = newNode;
 }
 
+int checkElement(Node **head, int k){
+    int n = sizeof(**head);
+    int count = 0;
+    Node* temp = *head;
+    for (int i = 0; temp != NULL && i <= n; i++){
+        if (temp->data == k){
+            count++;
+        }
+        temp = temp->next;
+    }
+    return count;
+}
+
+int checkPosition(){
+
+}
+
 int menu() {
     int choice;
     printf("1. Nhap mang so nguyen\n");
     printf("2. Them 1 phan tu vao vi tri bat ki\n");
     printf("3. So luong phan tu K, kiem tra chia het cho 3\n");
-    printf("4. Kiem tra 3 so chan duong lien tiep\n");
+    printf("4. Kiem tra 3 so chan duong dung canh nhau\n");
     printf("5. So luong phan tu la so duong chan, trung binh cong\n");
     printf("6. So duong dau danh sach, so am cuoi danh sach, day so duong tang dan, day so am giam dan\n");
     printf("0. Thoat\n");
@@ -181,15 +198,32 @@ int main() {
                 break;
             case 2: {
                 int x, k;
-                printf("Nhap X: ");
+                printf("Nhap so can chen: ");
                 scanf("%d", &x);
-                printf("Nhap vi tri k: ");
+                printf("Nhap vi tri: ");
                 scanf("%d", &k);
                 Insert(&head, x, k);
                 printList(head);
                 break;
             }
-            case 3:
+            case 3:{
+                int k;
+                printf("Nhap so can tim: ");
+                scanf("%d", &k);
+                int count = checkElement(&head, k);
+                if (count > 0){
+                printf("So luong phan tu %d la: %d\n", k, count);
+                }
+                else {
+                    printf("Khong tim thay phan tu %d\n"), k;
+                }
+                if (count%3 == 0){
+                    printf("So luong phan tu %d trong danh sach chia het cho 3\n");
+                }
+                else {
+                    printf("So luong phan tu %d trong danh sach khong chia het cho 3\n");
+                }
+            }
                 break;
             case 4:
                 break;
