@@ -12,7 +12,7 @@ typedef struct Node {
 Node* createNode(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     if (!newNode) {
-        printf("Memory allocation error\n");
+        printf("Loi phan bo bo nho\n");
         exit(1);
     }
     newNode->data = data;
@@ -116,7 +116,7 @@ void Input(Node **head) {
         int number = atoi(input);  // chuyen doi chuoi thanh so
         append(head, number);      // them so vao danh sach
     }
-
+    printf("-------------------------------------------------------------------------------------------------\n");
     printf("Danh sach da nhap:\n");
     printList(*head);
 }
@@ -130,26 +130,41 @@ void InsertFirst(Node **head, int x) {
 
 // chen node vao vi tri K
 void Insert(Node **head, int x, int k) {
-    int n = sizeof(**head);
     Node* newNode = createNode(x);
-    Node* temp = *head;
-    if (k < 1 || k > n + 1){
+    if (k < 1) {
+        printf("-------------------------------------------------------------------------------------------------\n");
         printf("Vi tri khong hop le\n");
         return;
     }
     if (k == 1) {
         InsertFirst(head, x);
+        printf("-------------------------------------------------------------------------------------------------\n");
+        printf("Danh sach sau khi chen: \n");
+        printList(*head);
         return;
     }
-
-    for (int i = 0; temp != NULL && i < k-2; i++) {
+    Node* temp = *head;
+    for (int i = 1; i < k - 1; i++) {
+        if (temp == NULL) {
+            printf("-------------------------------------------------------------------------------------------------\n");
+            printf("Vi tri khong hop le\n");
+            return;
+        }
         temp = temp->next;
     }
-
+    if (temp == NULL) {
+        printf("-------------------------------------------------------------------------------------------------\n");
+        printf("Vi tri khong hop le\n");
+        return;
+    }
     newNode->next = temp->next;
     temp->next = newNode;
+    printf("-------------------------------------------------------------------------------------------------\n");
+    printf("Danh sach sau khi chen: \n");
+    printList(*head);
 }
 
+// Kiem tra phan tu trong danh sach
 int checkElement(Node **head, int k){
     int n = sizeof(**head);
     int count = 0;
@@ -163,6 +178,7 @@ int checkElement(Node **head, int k){
     return count;
 }
 
+// Kiem tra 3 so duong canh nhau
 void checkPosition(Node *head) {
     Node* temp = head;
     int found = 0;
@@ -170,15 +186,19 @@ void checkPosition(Node *head) {
         if (temp->data > 0 && temp->data % 2 == 0 && 
             temp->next->data > 0 && temp->next->data % 2 == 0 &&
             temp->next->next->data > 0 && temp->next->next->data % 2 == 0) {
-            printf("Tim thay 3 so chan duong lien tiep o cac vi tri: %d, %d, %d\n", i, i+1, i+2);
+            printf("-------------------------------------------------------------------------------------------------\n");
+            printf("Tim thay 3 so chan duong lien tiep |%d|%d|%d| o cac vi tri: %d, %d, %d\n", temp->data, temp->next->data ,temp->next->next->data , i, i+1, i+2);
             found = 1;
         }
         temp = temp->next;
     }
-    if (found == 0)
+    if (found == 0){
+    printf("-------------------------------------------------------------------------------------------------\n");
     printf("Khong tim thay 3 so chan duong lien tiep\n");
+    }
 }
 
+// Kiem tra so luong so duong chan
 void checkCount(Node *head){
     Node* temp = head;
     int count = 0;
@@ -193,16 +213,110 @@ void checkCount(Node *head){
     }
     if (count > 0){
     AVG = (double)SUM/count;
+    printf("-------------------------------------------------------------------------------------------------\n");
     printf("So luong so chan duong trong danh sach la: %d\n", count);
     printf("Trung binh cong cac so chan duong trong danh sach la: %.2f\n", AVG);
     }
     else {
+        printf("-------------------------------------------------------------------------------------------------\n");
         printf("Khong co so chan duong trong danh sach\n");
     }
 }
 
+// Kiem tra so duong dau danh sach
+void FirstPosiNum(Node *head){
+    Node* temp = head;
+    int found = 0;
+    while (temp != NULL){
+        if (temp->data > 0){
+            printf("-------------------------------------------------------------------------------------------------\n");
+            printf("So duong dau danh sach la: %d\n", temp->data);
+            found = 1;
+            return;
+        }
+        temp = temp->next;
+    }
+    if (found == 0){
+        printf("-------------------------------------------------------------------------------------------------\n");
+        printf("Danh sach khong co so duong\n");
+    }
+}
+
+// Kiem tra so am cuoi danh sach
+void LastNegaNum(Node *head){
+    Node* temp = head;
+    int found = 0;
+    int savedNum;
+    while (temp != NULL){
+        if (temp->data < 0){
+            savedNum = temp->data;
+            found = 1;
+        }
+        temp = temp->next;
+    }
+    if (found == 1){
+        printf("So am cuoi danh sach la: %d\n", savedNum);
+    }
+    else {
+        printf("Danh sach khong co so am\n");
+    }
+}
+
+// Sap xep so duong tang dan
+void ASCPosiList(Node *head){
+    Node* temp = head;
+    Node* positiveList = NULL;
+
+    while (temp != NULL){
+        if (temp->data > 0){
+            append(&positiveList, temp->data);
+        }
+        temp = temp->next;
+    }
+
+    if (positiveList == NULL) {
+        printf("Day khong co so duong\n");
+        return;
+    }
+
+    ASCsortList(&positiveList);
+    printf("Day so duong tang dan: \n");
+    printList(positiveList);
+}
+
+// Sap xep so am giam dan
+void DESCNegaList(Node *head){
+    Node* temp = head;
+    Node* negativeList = NULL;
+
+    while (temp != NULL){
+        if (temp->data < 0){
+            append(&negativeList, temp->data);
+        }
+        temp = temp->next;
+    }
+
+    if (negativeList == NULL) {
+        printf("Day khong co so am\n");
+        return;
+    }
+
+    DESCsortList(&negativeList);
+    printf("Day so am giam dan: \n");
+    printList(negativeList);
+}
+
+// Tong hop ham function 6
+void MergeFunc(Node *head){
+    FirstPosiNum(head);
+    LastNegaNum(head);
+    ASCPosiList(head);
+    DESCNegaList(head);
+}
+
 int menu() {
     int choice;
+    printf("-------------------------------------------------------------------------------------------------\n");
     printf("1. Nhap mang so nguyen\n");
     printf("2. Them 1 phan tu vao vi tri bat ki\n");
     printf("3. So luong phan tu K, kiem tra chia het cho 3\n");
@@ -237,7 +351,6 @@ int main() {
                 printf("Nhap vi tri: ");
                 scanf("%d", &k);
                 Insert(&head, x, k);
-                printList(head);
                 break;
             }
             case 3:{
@@ -246,16 +359,18 @@ int main() {
                 scanf("%d", &k);
                 int count = checkElement(&head, k);
                 if (count > 0){
+                printf("-------------------------------------------------------------------------------------------------\n");
                 printf("So luong phan tu %d la: %d\n", k, count);
+                    if (count%3 == 0){
+                        printf("So luong phan tu %d trong danh sach chia het cho 3\n");
+                    }
+                    else {
+                        printf("So luong phan tu %d trong danh sach khong chia het cho 3\n");
+                    }
                 }
                 else {
+                    printf("-------------------------------------------------------------------------------------------------\n");
                     printf("Khong tim thay phan tu %d\n"), k;
-                }
-                if (count%3 == 0){
-                    printf("So luong phan tu %d trong danh sach chia het cho 3\n");
-                }
-                else {
-                    printf("So luong phan tu %d trong danh sach khong chia het cho 3\n");
                 }
             }
                 break;
@@ -266,6 +381,7 @@ int main() {
                 checkCount(head);
                 break;
             case 6:
+                MergeFunc(head);
                 break;
             default:
                 printf("Vui long chon lua chon hop le\n");
