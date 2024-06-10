@@ -75,10 +75,10 @@ void DESCsortList(Node **head) {
 void printList(Node *head) {
     Node* temp = head;
     while (temp != NULL) {
-        printf("|%d", temp->data);
+        printf("%d ", temp->data);
         temp = temp->next;
     }
-    printf("|\n");
+    printf("\n");
 }
 
 // check so nguyen
@@ -207,11 +207,15 @@ int checkElement(Node **head){
     }
     int n = sizeof(**head);
     int count = 0;
+    int totalcount = 0;
     Node* temp = *head;
     for (int i = 0; temp != NULL && i <= n; i++){
         if (temp->data == k){
             count++;
         }
+        if (temp->data%3 == 0){
+            totalcount++;
+        }     
         temp = temp->next;
     }
     if (count > 0){
@@ -227,6 +231,14 @@ int checkElement(Node **head){
         else {
             printf("-------------------------------------------------------------------------------------------------\n");
             printf("Khong tim thay phan tu %d\n", k);
+        }
+    if (totalcount > 0){
+        printf("-------------------------------------------------------------------------------------------------\n");
+        printf("So luong phan tu chia het cho 3 trong danh sach la: %d\n", totalcount);
+        }
+        else {
+            printf("-------------------------------------------------------------------------------------------------\n");
+            printf("Danh sach khong co phan tu chia het cho 3\n");
         }
 }
 
